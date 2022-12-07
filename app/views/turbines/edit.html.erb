@@ -1,0 +1,17 @@
+<h2>Windfarms</h2>
+
+<h4>Edit <%= @turbine.name %></h4>
+
+<%= form_tag turbine_path(@turbine) , method: :put do %>
+  <%= label_tag :name %>
+  <%= text_field_tag :name, @turbine.name %>
+  <%= label_tag :tower_height %>
+  <%= text_field_tag :tower_height, @turbine.tower_height %>
+  <%= label_tag :max_wind_speed %>
+  <%= text_field_tag :max_wind_speed, @turbine.max_wind_speed %>
+  <%= label_tag :min_wind_speed %>
+  <%= text_field_tag :min_wind_speed, @turbine.min_wind_speed %>
+  <%= label_tag :blades %>
+  <%= text_field_tag :blades, @turbine.blades %>
+  <%= submit_tag "Save", class: "btn btn-large btn-primary"%>
+<% end %>

@@ -4,13 +4,41 @@ class TurbinesController < ApplicationController
 
   def index
     @turbines = Turbine.all
-    render body: @turbines.map { |i| "#{i.name}: #{i.maximum_power}"  }
   end
 
   def create
     t = Turbine.create(turbines_params)
     if t.persisted?
-      render json: t, status: :created
+      redirect_to turbines_path
+    else
+      render json: t.errors, status: :unprocessable_entity
+    end
+  end
+
+  def show
+    unless (@turbine = Turbine.where(id: params[:id]).first)
+      render body: 'page not found', status: 404
+    end
+  end
+
+  def edit
+    unless (@turbine = Turbine.where(id: params[:id]).first)
+      render body: 'page not found', status: 404
+    end
+  end
+
+  def update
+    Turbine.where(id: params[:id]).update(turbines_params)
+    redirect_to turbine_path
+  end
+
+  def new
+  end
+
+  def destroy
+    t = Turbine.where(id: params[:id]).first.destroy
+    if t.destroyed?
+      redirect_to turbines_path
     else
       render json: t.errors, status: :unprocessable_entity
     end

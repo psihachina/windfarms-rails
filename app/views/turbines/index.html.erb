@@ -1,7 +1,16 @@
+<h2>Windfarms</h2>
+
+<h4>All turbine</h4>
+
 <% @turbines.each do |item| %>
-<!--  <ul>-->
-<!--    <li><%#= item.name %></li>-->
-<!--    <li><%#= item.maximum_power %></li>-->
-<!--    <li><%#= item.tower_height %></li>-->
-<!--  </ul>-->
+  <ul>
+    <li><%= link_to item.name, turbine_path(item) %></li>
+    <li><%= item.maximum_power %></li>
+    <li><%= item.tower_height %></li>
+    <li><%= button_to 'delete', turbine_path(item), method: :delete %></li>
+  </ul>
 <% end %>
+
+<br/>
+
+<%= link_to 'new turbine', new_turbine_path %>
