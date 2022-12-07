@@ -1,6 +1,8 @@
 class TurbinesController < ApplicationController
   layout false
   skip_before_action :verify_authenticity_token
+  before_action :find_turbine, only: %i[show edit update destroy]
+  before_action :admin?, only: %i[edit update new create destroy]
 
   def index
     @turbines = Turbine.all
@@ -16,28 +18,26 @@ class TurbinesController < ApplicationController
   end
 
   def show
-    unless (@turbine = Turbine.where(id: params[:id]).first)
-      render body: 'page not found', status: 404
-    end
+      render body: 'page not found', status: 404 unless @turbine
   end
 
   def edit
-    unless (@turbine = Turbine.where(id: params[:id]).first)
-      render body: 'page not found', status: 404
-    end
+      render body: 'page not found', status: 404 unless @turbine
   end
 
   def update
-    Turbine.where(id: params[:id]).update(turbines_params)
-    redirect_to turbine_path
+    if @turbine.update(turbines_params)
+      redirect_to turbine_path
+    else
+      render json: t.errors, status: :unprocessable_entity
+    end
   end
 
   def new
   end
 
   def destroy
-    t = Turbine.where(id: params[:id]).first.destroy
-    if t.destroyed?
+    if @turbine.destroy.destroyed?
       redirect_to turbines_path
     else
       render json: t.errors, status: :unprocessable_entity
@@ -45,6 +45,14 @@ class TurbinesController < ApplicationController
   end
 
   private
+
+  def find_turbine
+    @turbine = Turbine.where(id: params[:id]).first
+  end
+
+  def admin?
+    render json: 'Access denied', status: :forbidden unless params[:admin]
+  end
 
   def turbines_params
     params.permit(:name, :maximum_power, :max_wind_speed, :min_wind_speed, :blades,
