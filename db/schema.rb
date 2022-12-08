@@ -10,9 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_07_072129) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_08_131046) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "outputs", force: :cascade do |t|
+    t.integer "turbine_id"
+    t.float "speed"
+    t.float "production"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "turbines", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -25,8 +33,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_07_072129) do
     t.float "tower_height"
     t.float "rotor_diameter"
     t.string "description"
+    t.integer "user_id"
     t.index ["maximum_power"], name: "index_turbines_on_maximum_power"
     t.index ["name"], name: "index_turbines_on_name"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "login"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
