@@ -2,7 +2,7 @@ class TurbinesController < ApplicationController
   layout false
   skip_before_action :verify_authenticity_token
   before_action :find_turbine, only: %i[show edit update destroy]
-  before_action :admin?, only: %i[edit update new create destroy]
+  before_action :admin?, only: %i[edit]
 
   def index
     @turbines = Turbine.all
@@ -17,13 +17,11 @@ class TurbinesController < ApplicationController
     end
   end
 
-  def show
-      render body: 'page not found', status: 404 unless @turbine
-  end
-
-  def edit
-      render body: 'page not found', status: 404 unless @turbine
-  end
+  # def new; end
+  #
+  # def show; end
+  #
+  # def edit; end
 
   def update
     if @turbine.update(turbines_params)
@@ -33,8 +31,7 @@ class TurbinesController < ApplicationController
     end
   end
 
-  def new
-  end
+
 
   def expensive
     @turbines = Turbine.where('min_wind_speed > 6')
@@ -53,10 +50,12 @@ class TurbinesController < ApplicationController
 
   def find_turbine
     @turbine = Turbine.where(id: params[:id]).first
+    render_404 unless @turbine
   end
 
   def admin?
-    true
+    render_403 unless params[:admin]
+    # true
     # render json: 'Access denied', status: :forbidden unless params[:admin]
   end
 
