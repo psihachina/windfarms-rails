@@ -1,18 +1,41 @@
 <h2>Windfarms</h2>
 
-<h4>All turbine</h4>
+<% if !@turbines.empty? %>
+  <h4>All turbines</h4>
 
-<% @turbines.each do |item| %>
-  <ul>
-    <li><%= link_to item.name, turbine_path(item) %></li>
-    <li><%= item.maximum_power %></li>
-    <li><%= item.tower_height %></li>
-    <li><%= button_to 'delete', turbine_path(item), method: :delete %></li>
-  </ul>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Maximum power</th>
+      <th>Min wind speed (m/s)</th>
+      <th>Max wind speed (m/s)</th>
+      <th>Tower height (m)</th>
+      <th>Rotor diameter (m)</th>
+      <th>Delete</th>
+    </tr>
+    <% @turbines.each do |item| %>
+      <tr>
+        <td><%= item.id %></td>
+        <td><%= link_to item.name, turbine_path(item) %></td>
+        <td><%= item.maximum_power %></td>
+        <td><%= item.min_wind_speed %></td>
+        <td><%= item.max_wind_speed %></td>
+        <td><%= item.tower_height %></td>
+        <td><%= item.rotor_diameter %></td>
+        <td><%= button_to 'delete', turbine_path(item), method: :delete %></td>
+      </tr>
+    <% end %>
+  </table>
+
+  <br/>
+
+  <%= button_to 'expensive', expensive_turbines_path, method: :get%>
+  <%= button_to 'index', turbines_path, method: :get%>
+<% else %>
+  <h4>No turbines</h4>
 <% end %>
 
-<br/>
-
 <%= button_to 'new turbine', new_turbine_path, method: :get%>
-<%= button_to 'expensive', expensive_turbines_path, method: :get%>
-<%= button_to 'index', turbines_path, method: :get%>
+
+
